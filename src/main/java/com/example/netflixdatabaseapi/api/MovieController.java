@@ -39,6 +39,7 @@ public class MovieController {
 //                .orElse(null);
 //    }
 
+    @CrossOrigin
     @DeleteMapping(path = "{id}/{employeeId}")
     public void deleteMovieById(@PathVariable("id") int id, @PathVariable("employeeId") Integer employeeId){
         movieService.deleteMovie(id, employeeId);

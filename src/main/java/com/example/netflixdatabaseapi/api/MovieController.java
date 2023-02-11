@@ -39,9 +39,9 @@ public class MovieController {
 //                .orElse(null);
 //    }
 
-    @DeleteMapping(path = "{id}")
-    public void deleteMovieById(Integer employeeId, @PathVariable("id") int id){
-        movieService.deleteMovie(employeeId, id);
+    @DeleteMapping(path = "{id}/{employeeId}")
+    public void deleteMovieById(@PathVariable("id") int id, @PathVariable("employeeId") Integer employeeId){
+        movieService.deleteMovie(id, employeeId);
     }
 
     @PutMapping(path = "{id}")

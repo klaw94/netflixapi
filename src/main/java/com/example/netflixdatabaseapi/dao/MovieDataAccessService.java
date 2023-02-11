@@ -55,13 +55,31 @@ public class MovieDataAccessService implements MovieDao{
             String backdrop_path = resultSet.getString("backdrop_path");
             return new Movie(id, employeeId, media_type, backdrop_path);
         });
-        //This is the fake list we had before:
-        //return List.of(new Person(UUID.randomUUID(), "FROM POSTGRES DB"));
+
     }
 
     @Override
     public int deleteMovieById(int id, Integer employeeId) {
-        return 0;
+
+        try {
+            //Creating Connection Object
+            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "password");
+            //Preapared Statement
+            PreparedStatement ps = connection.prepareStatement(
+                    "DELETE FROM mylist WHERE id = ? AND employeeid = ?");
+            //Specifying the values of it's parameter
+            ps.setInt(1, id);
+            ps.setInt(2, employeeId);
+
+            //Execute the query
+            ps.executeUpdate();
+//            JOptionPane.showMessageDialog(null,"Data Registered Successfully");
+            return 0;
+
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+            return 404;
+        }
     }
 
     @Override

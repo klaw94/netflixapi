@@ -51,7 +51,7 @@ public class FavouriteGenresDataAccessService implements FavouriteGenresDao {
 
     @Override
     public List<FavouriteGenres> selectAllFavouriteGenres() {
-        final String sql = "SELECT * FROM favourite_genres WHERE score > 0 ORDER BY score DESC";
+        final String sql = "SELECT * FROM favourite_genres ORDER BY score DESC";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             Integer employeeId = Integer.valueOf(resultSet.getString("employeeid"));
             Integer genre_id = Integer.valueOf(resultSet.getString("genre_id"));

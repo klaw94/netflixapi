@@ -45,6 +45,8 @@ public class LikedMovieController {
         likedMovieService.deleteLikedMovie(id, employeeId);
     }
 
+
+    @CrossOrigin
     @PutMapping(path = "{id}/{employeeId}")
     public void updateMovie(@PathVariable("id") int id, @Valid @NonNull @RequestBody LikedMovie likedMovieToUpdate,  @PathVariable("employeeId") Integer employeeId){
         likedMovieService.updateLikedMovie(employeeId, likedMovieToUpdate);

@@ -1,5 +1,6 @@
 package com.example.netflixdatabaseapi.dao;
 
+import com.example.netflixdatabaseapi.model.FavouriteGenres;
 import com.example.netflixdatabaseapi.model.LikedMovie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,30 +11,32 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
-
-@Repository("liked")
-public class LikedMovieDataAccessService implements LikedMovieDao {
+@Repository("favourite")
+public class FavouriteGenresDataAccessService implements FavouriteGenresDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public LikedMovieDataAccessService(JdbcTemplate jdbcTemplate){
+    public FavouriteGenresDataAccessService(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public int insertLikedMovie(Integer employeeId, LikedMovie likedMovie) {
-        //final String sql = "INSERT INTO mylist (employeeID, id, media_type, backdrop_path) VALUES (0, ?, ?, ?)";
+    public int insertFavouriteGenre(Integer employeeId, FavouriteGenres favouriteGenres) {
         try {
             //Creating Connection Object
             Connection connection= DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","password");
             //Preapared Statement
-            PreparedStatement ps =connection.prepareStatement("INSERT INTO liked_films (employeeid, id, media_type, status) VALUES (?, ?, ?, ?)");
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO favourite_genres " +
+                            "(employeeid, genre_id, score, genre_name) " +
+                            "VALUES (?, ?, ?)");
             //Specifying the values of it's parameter
             ps.setInt(1, 0);
-            ps.setInt(2, likedMovie.getId());
-            ps.setString(3, likedMovie.getMediaType());
-            ps.setString(4, likedMovie.getStatus());
+            ps.setInt(2, favouriteGenres.getGenreId());
+            ps.setInt(3, favouriteGenres.getScore());
+            ps.setString(4, favouriteGenres.getGenreName());
             //Execute the query
             ps.executeUpdate();
 //            JOptionPane.showMessageDialog(null,"Data Registered Successfully");
@@ -47,29 +50,29 @@ public class LikedMovieDataAccessService implements LikedMovieDao {
 
 
     @Override
-    public List<LikedMovie> selectAllLikedMovies() {
-        final String sql = "SELECT * FROM liked_films";
+    public List<FavouriteGenres> selectAllFavouriteGenres() {
+        final String sql = "SELECT * FROM favourite_genres WHERE score > 0 ORDER BY score DESC";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             Integer employeeId = Integer.valueOf(resultSet.getString("employeeid"));
-            Integer id = Integer.valueOf(resultSet.getString("id"));
-            String media_type = resultSet.getString("media_type");
-            String status = resultSet.getString("status");
-            return new LikedMovie(id, employeeId, media_type, status);
+            Integer genre_id = Integer.valueOf(resultSet.getString("genre_id"));
+            Integer score = Integer.valueOf(resultSet.getString("score"));
+            String genreName = resultSet.getString("genre_name");
+            return new FavouriteGenres(genre_id, employeeId, score, genreName);
         });
 
     }
 
     @Override
-    public int deleteLikedMovieById(int id, Integer employeeId) {
+    public int deleteFavouriteGenre(Integer genreId, Integer employeeId) {
 
         try {
             //Creating Connection Object
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "password");
             //Preapared Statement
             PreparedStatement ps = connection.prepareStatement(
-                    "DELETE FROM liked_films WHERE id = ? AND employeeid = ?");
+                    "DELETE FROM favourite_genres WHERE genre_id = ? AND employeeid = ?");
             //Specifying the values of it's parameter
-            ps.setInt(1, id);
+            ps.setInt(1, genreId);
             ps.setInt(2, employeeId);
 
             //Execute the query
@@ -84,19 +87,35 @@ public class LikedMovieDataAccessService implements LikedMovieDao {
     }
 
     @Override
-    public int updateLikedMovieById(int id, LikedMovie likedMovie) {
+    public int updateScoreFavouriteGenre(Integer genreId, Integer employeeId, Integer addition) {
         try {
-            //Creating Connection Object
+            //TODO refactor this into its own getbyID method
             Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "password");
-            //Preapared Statement
             PreparedStatement ps = connection.prepareStatement(
-                    "UPDATE liked_films " +
-                            "SET status = ? " +
-                            "WHERE id = ?;");
+                    "SELECT score FROM favourite_genres " +
+                            "WHERE genre_id = ? AND employeeid = ?;");
+            //Specifying the values of it's parameter
+            ps.setInt(1, genreId);
+            ps.setInt(2, employeeId);
+
+            String sql = ps.toString();
+
+           Integer score = jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
+                return Integer.valueOf(resultSet.getString("score"));
+            });
+            score = score + addition;
 
             //Specifying the values of it's parameter
-            ps.setString(1, likedMovie.getStatus());
-            ps.setInt(2, likedMovie.getId());
+            //Preapared Statement
+             ps = connection.prepareStatement(
+                    "UPDATE favourite_genres " +
+                            "SET score = ? " +
+                            "WHERE genre_id = ? AND employeeid = ?;");
+
+            //Specifying the values of it's parameter
+            ps.setInt(1, score);
+            ps.setInt(2, genreId);
+            ps.setInt(3, employeeId);
 
 
             //Execute the query
@@ -109,5 +128,4 @@ public class LikedMovieDataAccessService implements LikedMovieDao {
             return 404;
         }
     }
-
 }

@@ -31,7 +31,7 @@ public class FavouriteGenresDataAccessService implements FavouriteGenresDao {
             PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO favourite_genres " +
                             "(employeeid, genre_id, score, genre_name) " +
-                            "VALUES (?, ?, ?)");
+                            "VALUES (?, ?, ?, ?)");
             //Specifying the values of it's parameter
             ps.setInt(1, 0);
             ps.setInt(2, favouriteGenres.getGenreId());

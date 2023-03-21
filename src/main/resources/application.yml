@@ -1,7 +1,7 @@
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: password
+    url: jdbc:postgresql://dpg-cga19p02qv25khjlus40-a.frankfurt-postgres.render.com/netflixdb
+    username: netflixdb_user
+    password: Nx6nvlEzF2zktwq8XhLtgIgjvj7IRfhM
     pool-size: 30

@@ -17,32 +17,17 @@ public class LikedMovieDataAccessService implements LikedMovieDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public LikedMovieDataAccessService(JdbcTemplate jdbcTemplate){
+    public LikedMovieDataAccessService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public int insertLikedMovie(Integer employeeId, LikedMovie likedMovie) {
-        //final String sql = "INSERT INTO mylist (employeeID, id, media_type, backdrop_path) VALUES (0, ?, ?, ?)";
-        try {
-            //Creating Connection Object
-            Connection connection= DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","password");
-            //Preapared Statement
-            PreparedStatement ps =connection.prepareStatement("INSERT INTO liked_films (employeeid, id, media_type, status) VALUES (?, ?, ?, ?)");
-            //Specifying the values of it's parameter
-            ps.setInt(1, 0);
-            ps.setInt(2, likedMovie.getId());
-            ps.setString(3, likedMovie.getMediaType());
-            ps.setString(4, likedMovie.getStatus());
-            //Execute the query
-            ps.executeUpdate();
-//            JOptionPane.showMessageDialog(null,"Data Registered Successfully");
-            return 0;
+        String sql = "INSERT INTO liked_films (employeeid, id, media_type, status) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, 0, likedMovie.getId(), likedMovie.getMediaType(), likedMovie.getStatus());
 
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-            return 404;
-        }
+        return 0;
+
     }
 
 
@@ -62,52 +47,22 @@ public class LikedMovieDataAccessService implements LikedMovieDao {
     @Override
     public int deleteLikedMovieById(int id, Integer employeeId) {
 
-        try {
-            //Creating Connection Object
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "password");
-            //Preapared Statement
-            PreparedStatement ps = connection.prepareStatement(
-                    "DELETE FROM liked_films WHERE id = ? AND employeeid = ?");
-            //Specifying the values of it's parameter
-            ps.setInt(1, id);
-            ps.setInt(2, employeeId);
+        String sql = "DELETE FROM liked_films WHERE id = ? AND employeeid = ?";
+        //Specifying the values of it's parameter
+        jdbcTemplate.update(sql, id, employeeId);
 
-            //Execute the query
-            ps.executeUpdate();
-//            JOptionPane.showMessageDialog(null,"Data Registered Successfully");
-            return 0;
-
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-            return 404;
-        }
+        return 0;
     }
 
     @Override
     public int updateLikedMovieById(int id, LikedMovie likedMovie) {
-        try {
-            //Creating Connection Object
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "password");
-            //Preapared Statement
-            PreparedStatement ps = connection.prepareStatement(
-                    "UPDATE liked_films " +
-                            "SET status = ? " +
-                            "WHERE id = ?;");
+        String sql = "UPDATE liked_films " +
+                "SET status = ? " +
+                "WHERE id = ?;";
+        jdbcTemplate.update(sql, 0, likedMovie.getStatus(), likedMovie.getId());
 
-            //Specifying the values of it's parameter
-            ps.setString(1, likedMovie.getStatus());
-            ps.setInt(2, likedMovie.getId());
+        return 0;
 
-
-            //Execute the query
-            ps.executeUpdate();
-//            JOptionPane.showMessageDialog(null,"Data Registered Successfully");
-            return 0;
-
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-            return 404;
-        }
     }
 
 }

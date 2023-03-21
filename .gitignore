@@ -1,5 +1,6 @@
 HELP.md
 target/
+/src/main/resources/application.yml
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -20,7 +21,6 @@ target/
 *.ipr
 
 ### NetBeans ###
-/src/main/resources/application.yml
 /nbproject/private/
 /nbbuild/
 /dist/

@@ -28,27 +28,10 @@ public class MediaDataAccessService implements MediaDao {
      * @return 0 is success and 404 is error
      */
     @Override
-    public int insertMovie(Integer employeeId, Media media) {
-        //final String sql = "INSERT INTO mylist (employeeID, id, media_type, backdrop_path) VALUES (0, ?, ?, ?)";
-        try {
-            //Creating Connection Object
-            Connection connection= DriverManager.getConnection("jdbc:postgresql:////localhost:5432/postgres","postgres","password");
-            //Preapared Statement
-            PreparedStatement ps =connection.prepareStatement("INSERT INTO mylist (employeeid, id, media_type, backdrop_path) " +
-                    "VALUES (?, ?, ?, ?); ");
-            //Specifying the values of it's parameter
-            ps.setInt(1, 0);
-            ps.setInt(2, media.getId());
-            ps.setString(3, media.getMediaType());
-            ps.setString(4, media.getBackdrop_path());
-            //Execute the query
-            ps.executeUpdate();
-            return 0;
-
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-            return 404;
-        }
+    public int insertMovie(Integer employeeId, Movie movie) {
+        String sql = "INSERT INTO mylist (employeeid, id, media_type, backdrop_path) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, 0, movie.getId(), movie.getMediaType(), movie.getBackdrop_path());
+        return 0;
     }
 
 
@@ -97,24 +80,10 @@ public class MediaDataAccessService implements MediaDao {
     @Override
     public int deleteMovieById(int id, Integer employeeId) {
 
-        try {
-            //Creating Connection Object
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "password");
-            //Preapared Statement
-            PreparedStatement ps = connection.prepareStatement(
-                    "DELETE FROM mylist WHERE id = ? AND employeeid = ?");
-            //Specifying the values of it's parameter
-            ps.setInt(1, id);
-            ps.setInt(2, employeeId);
+        String sql = "DELETE FROM mylist WHERE id = ? AND employeeid = ?";
+        jdbcTemplate.update(sql, id, employeeId);
 
-            //Execute the query
-            ps.executeUpdate();
-            return 0;
-
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-            return 404;
-        }
+        return 0;
     }
 
     @Override

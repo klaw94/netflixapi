@@ -21,29 +21,13 @@ public class FavouriteGenreDataAccessService implements FavouriteGenreDao {
     }
 
     @Override
-    public int insertFavouriteGenre(Integer employeeId, FavouriteGenreResponseModel favouriteGenres) {
-        try {
-            //Creating Connection Object
-            Connection connection= DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","password");
-            //Preapared Statement
-            PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO favourite_genres " +
-                            "(employeeid, genre_id, score, genre_name) " +
-                            "VALUES (?, ?, ?, ?)");
-            //Specifying the values of it's parameter
-            ps.setInt(1, 0);
-            ps.setInt(2, favouriteGenres.getGenreId());
-            ps.setInt(3, favouriteGenres.getScore());
-            ps.setString(4, favouriteGenres.getGenreName());
-            //Execute the query
-            ps.executeUpdate();
-//            JOptionPane.showMessageDialog(null,"Data Registered Successfully");
-            return 0;
+    public int insertFavouriteGenre(Integer employeeId, FavouriteGenres favouriteGenres) {
+        String sql = "INSERT INTO favourite_genres " +
+                "(employeeid, genre_id, score, genre_name) " +
+                "VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, 0, favouriteGenres.getGenreId(), favouriteGenres.getScore(), favouriteGenres.getGenreName());
+        return 0;
 
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-            return 404;
-        }
     }
 
 
@@ -62,68 +46,32 @@ public class FavouriteGenreDataAccessService implements FavouriteGenreDao {
 
     @Override
     public int deleteFavouriteGenre(Integer genreId, Integer employeeId) {
+        String sql = "DELETE FROM favourite_genres WHERE genre_id = ? AND employeeid = ?";
+        jdbcTemplate.update(sql, genreId, employeeId);
+        return 0;
 
-        try {
-            //Creating Connection Object
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "password");
-            //Preapared Statement
-            PreparedStatement ps = connection.prepareStatement(
-                    "DELETE FROM favourite_genres WHERE genre_id = ? AND employeeid = ?");
-            //Specifying the values of it's parameter
-            ps.setInt(1, genreId);
-            ps.setInt(2, employeeId);
 
-            //Execute the query
-            ps.executeUpdate();
-//            JOptionPane.showMessageDialog(null,"Data Registered Successfully");
-            return 0;
-
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-            return 404;
-        }
     }
 
     @Override
     public int updateScoreFavouriteGenre(Integer genreId, Integer employeeId, Integer addition) {
-        try {
-            //TODO refactor this into its own getbyID method
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "password");
-            PreparedStatement ps = connection.prepareStatement(
-                    "SELECT score FROM favourite_genres " +
-                            "WHERE genre_id = ? AND employeeid = ?;");
-            //Specifying the values of it's parameter
-            ps.setInt(1, genreId);
-            ps.setInt(2, employeeId);
+        //This is not here anymore of couse. This needs to go to the
+        String sql = "SELECT score FROM favourite_genres " +
+                "WHERE genre_id = ? AND employeeid = ?;";
 
-            String sql = ps.toString();
+        Integer score = jdbcTemplate.queryForObject(sql, new Object[]{genreId, employeeId}, (resultSet, i) -> {
+            return Integer.valueOf(resultSet.getString("score"));
+        });
+        score = score + addition;
 
-           Integer score = jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
-                return Integer.valueOf(resultSet.getString("score"));
-            });
-            score = score + addition;
+        //Specifying the values of it's parameter
+        //Preapared Statement
+        sql = "UPDATE favourite_genres " +
+                "SET score = ? " +
+                "WHERE genre_id = ? AND employeeid = ?;";
+        jdbcTemplate.update(sql, score, genreId, employeeId);
 
-            //Specifying the values of it's parameter
-            //Preapared Statement
-             ps = connection.prepareStatement(
-                    "UPDATE favourite_genres " +
-                            "SET score = ? " +
-                            "WHERE genre_id = ? AND employeeid = ?;");
+        return 0;
 
-            //Specifying the values of it's parameter
-            ps.setInt(1, score);
-            ps.setInt(2, genreId);
-            ps.setInt(3, employeeId);
-
-
-            //Execute the query
-            ps.executeUpdate();
-//            JOptionPane.showMessageDialog(null,"Data Registered Successfully");
-            return 0;
-
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-            return 404;
-        }
     }
 }

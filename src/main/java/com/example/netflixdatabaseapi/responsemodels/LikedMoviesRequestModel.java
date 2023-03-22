@@ -1,8 +1,6 @@
-package com.example.netflixdatabaseapi.model;
+package com.example.netflixdatabaseapi.responsemodels;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-public class LikedMovie {
+public class LikedMoviesRequestModel {
         private final Integer id;
         private final Integer employeeId;
         private final String media_type;
@@ -10,10 +8,7 @@ public class LikedMovie {
 
         private final String status;
 
-        public LikedMovie(@JsonProperty("id") Integer id,
-                          @JsonProperty("employeeid") Integer employeeId,
-                          @JsonProperty("media_type") String media_type,
-                          @JsonProperty("status") String status){
+        public LikedMoviesRequestModel(Integer id, Integer employeeId, String media_type, String status){
             this.id = id;
             this.employeeId = employeeId;
             this.media_type = media_type;

@@ -1,7 +1,6 @@
 package com.example.netflixdatabaseapi.dao;
 
-import com.example.netflixdatabaseapi.model.FavouriteGenres;
-import com.example.netflixdatabaseapi.model.LikedMovie;
+import com.example.netflixdatabaseapi.responsemodels.FavouriteGenreResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -11,19 +10,18 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 @Repository("favourite")
-public class FavouriteGenresDataAccessService implements FavouriteGenresDao {
+public class FavouriteGenreDataAccessService implements FavouriteGenreDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public FavouriteGenresDataAccessService(JdbcTemplate jdbcTemplate){
+    public FavouriteGenreDataAccessService(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public int insertFavouriteGenre(Integer employeeId, FavouriteGenres favouriteGenres) {
+    public int insertFavouriteGenre(Integer employeeId, FavouriteGenreResponseModel favouriteGenres) {
         try {
             //Creating Connection Object
             Connection connection= DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres","postgres","password");
@@ -50,14 +48,14 @@ public class FavouriteGenresDataAccessService implements FavouriteGenresDao {
 
 
     @Override
-    public List<FavouriteGenres> selectAllFavouriteGenres() {
+    public List<FavouriteGenreResponseModel> selectAllFavouriteGenres() {
         final String sql = "SELECT * FROM favourite_genres ORDER BY score DESC";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             Integer employeeId = Integer.valueOf(resultSet.getString("employeeid"));
             Integer genre_id = Integer.valueOf(resultSet.getString("genre_id"));
             Integer score = Integer.valueOf(resultSet.getString("score"));
             String genreName = resultSet.getString("genre_name");
-            return new FavouriteGenres(genre_id, employeeId, score, genreName);
+            return new FavouriteGenreResponseModel(genre_id, employeeId, score, genreName);
         });
 
     }

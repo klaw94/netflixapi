@@ -1,8 +1,7 @@
 package com.example.netflixdatabaseapi.service;
 
-import com.example.netflixdatabaseapi.dao.FavouriteGenresDao;
-import com.example.netflixdatabaseapi.dao.FavouriteGenresDao;
-import com.example.netflixdatabaseapi.model.FavouriteGenres;
+import com.example.netflixdatabaseapi.dao.FavouriteGenreDao;
+import com.example.netflixdatabaseapi.responsemodels.FavouriteGenreResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -12,26 +11,26 @@ import java.util.List;
 @Service
 public class FavouriteGenresService {
 
-    private final FavouriteGenresDao favouriteGenresDao;
+    private final FavouriteGenreDao favouriteGenreDao;
 
     @Autowired
-    public FavouriteGenresService(@Qualifier("favourite") FavouriteGenresDao favouriteGenresDao){
-        this.favouriteGenresDao = favouriteGenresDao;
+    public FavouriteGenresService(@Qualifier("favourite") FavouriteGenreDao favouriteGenreDao){
+        this.favouriteGenreDao = favouriteGenreDao;
     }
 
-    public int addFavouriteGenres(Integer employeeID, FavouriteGenres favouriteGenres){
-        return favouriteGenresDao.insertFavouriteGenre(employeeID, favouriteGenres);
+    public int addFavouriteGenres(Integer employeeID, FavouriteGenreResponseModel favouriteGenres){
+        return favouriteGenreDao.insertFavouriteGenre(employeeID, favouriteGenres);
     }
 
-    public List<FavouriteGenres> getAllFavouriteGenress(){
-        return favouriteGenresDao.selectAllFavouriteGenres();
+    public List<FavouriteGenreResponseModel> getAllFavouriteGenress(){
+        return favouriteGenreDao.selectAllFavouriteGenres();
     }
 
     public int deleteFavouriteGenres(Integer id, Integer employeeId){
-        return favouriteGenresDao.deleteFavouriteGenre(id, employeeId);
+        return favouriteGenreDao.deleteFavouriteGenre(id, employeeId);
     }
 
     public int updateScoreFavouriteGenre(Integer genreId, Integer employeeId, Integer addition){
-        return favouriteGenresDao.updateScoreFavouriteGenre(genreId, employeeId, addition);
+        return favouriteGenreDao.updateScoreFavouriteGenre(genreId, employeeId, addition);
     }
 }

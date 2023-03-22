@@ -1,20 +1,18 @@
-package com.example.netflixdatabaseapi.model;
+package com.example.netflixdatabaseapi.responsemodels;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.NotBlank;
-
-public class FavouriteGenres {
+public class FavouriteGenreResponseModel {
     private final Integer genre_id;
     private final Integer employeeId;
     private Integer score;
 
     private final String genre_name;
 
-    public FavouriteGenres(@JsonProperty("genre_id") Integer genre_id,
-                 @JsonProperty("employeeid") Integer employeeId,
-                           @JsonProperty("score") Integer score,
-                           @JsonProperty("genre_name") String genre_name) {
+    public FavouriteGenreResponseModel(Integer genre_id,
+                                       Integer employeeId,
+                                       Integer score,
+                                       String genre_name) {
         this.genre_id = genre_id;
         this.employeeId = employeeId;
         this.score = score;
@@ -30,8 +28,6 @@ public class FavouriteGenres {
     public int getScore() {
         return score;
     }
-
-    public void addToScore(int number) { score = score + number;}
 
     public int getEmployeeId() { return employeeId; }
 

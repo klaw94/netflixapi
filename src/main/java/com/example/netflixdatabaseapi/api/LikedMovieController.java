@@ -1,9 +1,7 @@
 package com.example.netflixdatabaseapi.api;
 
-import com.example.netflixdatabaseapi.model.LikedMovie;
-import com.example.netflixdatabaseapi.model.Movie;
+import com.example.netflixdatabaseapi.responsemodels.LikedMoviesRequestModel;
 import com.example.netflixdatabaseapi.service.LikedMovieService;
-import com.example.netflixdatabaseapi.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +22,12 @@ public class LikedMovieController {
 
     @CrossOrigin
     @PostMapping
-    public void addLikedMovie(Integer employeeId, @Valid @NonNull @RequestBody LikedMovie likedMovie){
+    public void addLikedMovie(Integer employeeId, @Valid @NonNull @RequestBody LikedMoviesRequestModel likedMovie){
         likedMovieService.addLikedMovie(employeeId, likedMovie);
     }
     @CrossOrigin
     @GetMapping
-    public List<LikedMovie> getAllLikedMovies() {
+    public List<LikedMoviesRequestModel> getAllLikedMovies() {
         return likedMovieService.getAllLikedMovies();
     }
 
@@ -48,7 +46,7 @@ public class LikedMovieController {
 
     @CrossOrigin
     @PutMapping(path = "{id}/{employeeId}")
-    public void updateMovie(@PathVariable("id") int id, @Valid @NonNull @RequestBody LikedMovie likedMovieToUpdate,  @PathVariable("employeeId") Integer employeeId){
+    public void updateMovie(@PathVariable("id") int id, @Valid @NonNull @RequestBody LikedMoviesRequestModel likedMovieToUpdate, @PathVariable("employeeId") Integer employeeId){
         likedMovieService.updateLikedMovie(employeeId, likedMovieToUpdate);
     }
 }

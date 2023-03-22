@@ -1,16 +1,16 @@
 package com.example.netflixdatabaseapi.dao;
 
-import com.example.netflixdatabaseapi.model.LikedMovie;
+import com.example.netflixdatabaseapi.responsemodels.LikedMoviesRequestModel;
 
 import java.util.List;
 
 public interface LikedMovieDao {
-    int insertLikedMovie(Integer employeeId, LikedMovie likedMovie);
+    int insertLikedMovie(Integer employeeId, LikedMoviesRequestModel likedMovie);
 
 
-    List<LikedMovie> selectAllLikedMovies();
+    List<LikedMoviesRequestModel> selectAllLikedMovies();
 
     int deleteLikedMovieById(int id, Integer employeeId);
 
-    int updateLikedMovieById(int id,  LikedMovie likedMovie);
+    int updateLikedMovieById(int id,  LikedMoviesRequestModel likedMovie);
 }

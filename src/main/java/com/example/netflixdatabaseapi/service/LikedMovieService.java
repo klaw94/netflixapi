@@ -1,7 +1,7 @@
 package com.example.netflixdatabaseapi.service;
 
 import com.example.netflixdatabaseapi.dao.LikedMovieDao;
-import com.example.netflixdatabaseapi.model.LikedMovie;
+import com.example.netflixdatabaseapi.responsemodels.LikedMoviesRequestModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -18,11 +18,11 @@ public class LikedMovieService {
         this.likedMovieDao = likedMovieDao;
     }
 
-    public int addLikedMovie(Integer employeeID, LikedMovie likedMovie){
+    public int addLikedMovie(Integer employeeID, LikedMoviesRequestModel likedMovie){
         return likedMovieDao.insertLikedMovie(employeeID, likedMovie);
     }
 
-    public List<LikedMovie> getAllLikedMovies(){
+    public List<LikedMoviesRequestModel> getAllLikedMovies(){
         return likedMovieDao.selectAllLikedMovies();
     }
 
@@ -30,7 +30,7 @@ public class LikedMovieService {
         return likedMovieDao.deleteLikedMovieById(id, employeeId);
     }
 
-    public int updateLikedMovie(Integer employeeId, LikedMovie newLikedMovie){
+    public int updateLikedMovie(Integer employeeId, LikedMoviesRequestModel newLikedMovie){
         return likedMovieDao.updateLikedMovieById(employeeId, newLikedMovie);
     }
 }

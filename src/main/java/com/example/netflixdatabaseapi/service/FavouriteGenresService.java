@@ -1,6 +1,7 @@
 package com.example.netflixdatabaseapi.service;
 
 import com.example.netflixdatabaseapi.dao.FavouriteGenreDao;
+import com.example.netflixdatabaseapi.model.Genre;
 import com.example.netflixdatabaseapi.responsemodels.FavouriteGenreResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,11 +19,11 @@ public class FavouriteGenresService {
         this.favouriteGenreDao = favouriteGenreDao;
     }
 
-    public int addFavouriteGenres(Integer employeeID, FavouriteGenreResponseModel favouriteGenres){
+    public int addFavouriteGenres(Integer employeeID, Genre favouriteGenres){
         return favouriteGenreDao.insertFavouriteGenre(employeeID, favouriteGenres);
     }
 
-    public List<FavouriteGenreResponseModel> getAllFavouriteGenress(){
+    public List<FavouriteGenreResponseModel> getAllFavouriteGenres(){
         return favouriteGenreDao.selectAllFavouriteGenres();
     }
 

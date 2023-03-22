@@ -1,5 +1,6 @@
 package com.example.netflixdatabaseapi.dao;
 
+import com.example.netflixdatabaseapi.model.Genre;
 import com.example.netflixdatabaseapi.responsemodels.FavouriteGenreResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,11 +22,11 @@ public class FavouriteGenreDataAccessService implements FavouriteGenreDao {
     }
 
     @Override
-    public int insertFavouriteGenre(Integer employeeId, FavouriteGenres favouriteGenres) {
-        String sql = "INSERT INTO favourite_genres " +
-                "(employeeid, genre_id, score, genre_name) " +
-                "VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sql, 0, favouriteGenres.getGenreId(), favouriteGenres.getScore(), favouriteGenres.getGenreName());
+    public int insertFavouriteGenre(Integer employeeId, Genre favouriteGenres) {
+//        String sql = "INSERT INTO favourite_genres " +
+//                "(employeeid, genre_id, score, genre_name) " +
+//                "VALUES (?, ?, ?, ?)";
+//        jdbcTemplate.update(sql, 0, Genre.getGenreId(), Genre.getScore(), Genre.getGenreName());
         return 0;
 
     }

@@ -22,7 +22,7 @@ public class LikedMovieDataAccessService implements LikedMovieDao {
     }
 
     @Override
-    public int insertLikedMovie(Integer employeeId, LikedMovie likedMovie) {
+    public int insertLikedMovie(Integer employeeId, LikedMoviesRequestModel likedMovie) {
         String sql = "INSERT INTO liked_films (employeeid, id, media_type, status) VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(sql, 0, likedMovie.getId(), likedMovie.getMediaType(), likedMovie.getStatus());
 
@@ -55,11 +55,11 @@ public class LikedMovieDataAccessService implements LikedMovieDao {
     }
 
     @Override
-    public int updateLikedMovieById(int id, LikedMovie likedMovie) {
-        String sql = "UPDATE liked_films " +
-                "SET status = ? " +
-                "WHERE id = ?;";
-        jdbcTemplate.update(sql, 0, likedMovie.getStatus(), likedMovie.getId());
+    public int updateLikedMovieById(int id, LikedMoviesRequestModel likedMovie) {
+//        String sql = "UPDATE liked_films " +
+//                "SET status = ? " +
+//                "WHERE id = ?;";
+//        jdbcTemplate.update(sql, 0, likedMovie.getStatus(), likedMovie.getId());
 
         return 0;
 

@@ -2,6 +2,7 @@ package com.example.netflixdatabaseapi.api;
 
 
 import com.example.netflixdatabaseapi.model.Media;
+import com.example.netflixdatabaseapi.requestmodels.WatchlistMovieRequestModel;
 import com.example.netflixdatabaseapi.responsemodels.WatchListMovieResponseModel;
 import com.example.netflixdatabaseapi.service.ListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,13 @@ public class ListController {
 
     @CrossOrigin
     @PostMapping
-    public void addMovieToList(Integer employeeId, @Valid @NonNull @RequestBody Media media){
-        listService.addMovie(employeeId, media);
-    }
-    @CrossOrigin
-    @GetMapping
-    public List<WatchListMovieResponseModel> getAllMovies() {
-        return listService.getAllMovies();
+    public void addMediaToList(@Valid @NonNull @RequestBody WatchlistMovieRequestModel watchlistMovieRequestModel){
+        listService.addMovie(watchlistMovieRequestModel);
     }
 
     @GetMapping(path = "{userId}")
     public List<WatchListMovieResponseModel> getMoviesInMyList(@PathVariable("userId") Integer userId){
-        return listService.getMoviesInMyList(userId);
+        return listService.getMediaInMyList(userId);
     }
 
     @CrossOrigin

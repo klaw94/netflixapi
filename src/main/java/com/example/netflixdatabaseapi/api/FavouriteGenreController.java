@@ -1,5 +1,6 @@
 package com.example.netflixdatabaseapi.api;
 
+import com.example.netflixdatabaseapi.model.Genre;
 import com.example.netflixdatabaseapi.responsemodels.FavouriteGenreResponseModel;
 import com.example.netflixdatabaseapi.service.FavouriteGenresService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,14 @@ public class FavouriteGenreController {
 
     @CrossOrigin
     @PostMapping
-    public void addFavouriteGenres(Integer employeeId, @Valid @NonNull @RequestBody FavouriteGenreResponseModel favouriteGenres){
+    public void addFavouriteGenres(Integer employeeId, @Valid @NonNull @RequestBody Genre favouriteGenres){
         favouriteGenresService.addFavouriteGenres(employeeId, favouriteGenres);
     }
 
     @CrossOrigin
     @GetMapping
     public List<FavouriteGenreResponseModel> getAllFavouriteGenres() {
-        return favouriteGenresService.getAllFavouriteGenress();
+        return favouriteGenresService.getAllFavouriteGenres();
     }
 
 

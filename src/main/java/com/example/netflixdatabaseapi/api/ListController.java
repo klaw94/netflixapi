@@ -35,15 +35,12 @@ public class ListController {
     }
 
     @CrossOrigin
-    @DeleteMapping(path = "{id}/{employeeId}")
-    public void deleteMovieById(@PathVariable("id") int id, @PathVariable("employeeId") Integer employeeId){
-        listService.deleteMovie(id, employeeId);
+    @DeleteMapping(path = "{id}/{employeeId}/{mediaType}")
+    public void deleteMovieById(@PathVariable("id") int id, @PathVariable("employeeId") Integer employeeId, @PathVariable("mediaType") String mediaType){
+        listService.deleteMovie(id, employeeId, mediaType);
     }
 
-    @PutMapping(path = "{id}")
-    public void updateMovie(Integer employeeId, @PathVariable("id") int id, @Valid @NonNull @RequestBody Media media){
-        listService.updateMovie(employeeId, media);
-    }
+
 }
 
 

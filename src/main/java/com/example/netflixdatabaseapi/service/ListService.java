@@ -26,29 +26,6 @@ public class ListService {
         this.watchlistRelationshipDao = watchlistRelationshipDao;
     }
 
-    public int addMovie(WatchlistMovieRequestModel watchlistMovieRequestModel) {
-        //check does this film exist already?
-        Optional<Media> media = mediaDao.getMediaByIdAndMediaType(watchlistMovieRequestModel.getId(), watchlistMovieRequestModel.getMediaType());
-        int resultStatus = 400;
-        //add media in media db if the film is not already there.
-        if (media.isEmpty()) {
-            resultStatus = mediaDao.insertMovie(watchlistMovieRequestModel.getId(), watchlistMovieRequestModel.getMediaType(), watchlistMovieRequestModel.getBackdrop_path());
-        }
-        if (resultStatus == 0) {
-            return watchlistRelationshipDao.insertWatchlistRelationship(watchlistMovieRequestModel.getUserId(), watchlistMovieRequestModel.getId(), watchlistMovieRequestModel.getMediaType());
-        }
-        return 404;
-    }
-
-
-    public int deleteMovie(Integer id, Integer employeeId) {
-        return mediaDao.deleteMovieById(id, employeeId);
-    }
-
-    public int updateMovie(Integer employeeId, Media media) {
-        return mediaDao.updateMovieById(employeeId, media);
-    }
-
     public List<WatchListMovieResponseModel> getMediaInMyList(Integer userId) {
 
         List<Media> mediaList = mediaDao.getMediaInMyList(userId);
@@ -63,5 +40,32 @@ public class ListService {
                 .collect(Collectors.toList());
         return responseList;
     }
+
+    public int addMovie(WatchlistMovieRequestModel watchlistMovieRequestModel) {
+        //check does this film exist already?
+        Optional<Media> media = mediaDao.getMediaByIdAndMediaType(watchlistMovieRequestModel.getId(), watchlistMovieRequestModel.getMediaType());
+        //add media in media db if the film is not already there.
+        if (media.isEmpty()) {
+            mediaDao.insertMovie(watchlistMovieRequestModel.getId(), watchlistMovieRequestModel.getMediaType(), watchlistMovieRequestModel.getBackdrop_path());
+        }
+
+        return watchlistRelationshipDao.insertWatchlistRelationship(watchlistMovieRequestModel.getUserId(), watchlistMovieRequestModel.getId(), watchlistMovieRequestModel.getMediaType());
+
+    }
+
+
+    public void deleteMovie(Integer mediaId, Integer userId, String mediaType) {
+        //I delete the relationship between user and list
+        watchlistRelationshipDao.deleteWatchlistRelationship(mediaId, userId, mediaType);
+        //I check is this media piece still in the list of another user?
+        Optional<WatchlistRelationship> watchlist = watchlistRelationshipDao.getWatchlistRelationshipById(mediaId, mediaType);
+        //If the film is in nobody's list, I delete from the media db.
+        if(watchlist.isEmpty()){
+            mediaDao.deleteMediaById(mediaId, mediaType);
+        }
+    }
+
+
+
 
 }

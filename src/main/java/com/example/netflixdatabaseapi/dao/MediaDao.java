@@ -12,10 +12,8 @@ public interface MediaDao {
 
     Optional<Media> getMediaByIdAndMediaType(Integer id, String mediaType);
 
-    int deleteMovieById(int id, Integer employeeId);
+    int deleteMediaById(int id, String mediaType);
 
-    int updateMovieById(int id, Media media);
-
-    public List<Media> getMediaInMyList(Integer employeeId);
+    List<Media> getMediaInMyList(Integer employeeId);
 
 }

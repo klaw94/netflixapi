@@ -58,17 +58,13 @@ public class MediaDataAccessService implements MediaDao {
     }
 
     @Override
-    public int deleteMovieById(int id, Integer employeeId) {
+    public int deleteMediaById(int mediaId, String mediaType) {
 
-        String sql = "DELETE FROM mylist WHERE id = ? AND employeeid = ?";
-        jdbcTemplate.update(sql, id, employeeId);
+        String sql = "DELETE FROM media WHERE id = ? AND media_type = ?";
+        jdbcTemplate.update(sql, mediaId, mediaType);
 
         return 0;
     }
 
-    @Override
-    public int updateMovieById(int id, Media media) {
-        return 0;
-    }
 
 }

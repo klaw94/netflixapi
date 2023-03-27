@@ -1,28 +1,24 @@
 package com.example.netflixdatabaseapi.dao;
 
-import com.example.netflixdatabaseapi.responsemodels.LikedMoviesRequestModel;
+import com.example.netflixdatabaseapi.model.Like;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 
 
 @Repository("liked")
-public class LikedMovieDataAccessService implements LikedMovieDao {
+public class LikeDataAccessService implements LikeDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public LikedMovieDataAccessService(JdbcTemplate jdbcTemplate) {
+    public LikeDataAccessService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public int insertLikedMovie(Integer employeeId, LikedMoviesRequestModel likedMovie) {
+    public int insertLikedMovie(Integer employeeId, LikedMoviesResponseModel likedMovie) {
         String sql = "INSERT INTO liked_films (employeeid, id, media_type, status) VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(sql, 0, likedMovie.getId(), likedMovie.getMediaType(), likedMovie.getStatus());
 
@@ -32,16 +28,27 @@ public class LikedMovieDataAccessService implements LikedMovieDao {
 
 
     @Override
-    public List<LikedMoviesRequestModel> selectAllLikedMovies() {
+    public List<LikedMoviesResponseModel> selectAllLikes() {
         final String sql = "SELECT * FROM liked_films";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             Integer employeeId = Integer.valueOf(resultSet.getString("employeeid"));
             Integer id = Integer.valueOf(resultSet.getString("id"));
             String media_type = resultSet.getString("media_type");
             String status = resultSet.getString("status");
-            return new LikedMoviesRequestModel(id, employeeId, media_type, status);
+            return new LikedMoviesResponseModel(id, employeeId, media_type, status);
         });
 
+    }
+
+    @Override
+    public List<Like> selectAllLikesByUserId(Integer userId) {
+        final String sql = "SELECT * FROM likes where user_id = ? ;";
+        return jdbcTemplate.query(sql, new Object[]{userId}, (resultSet, i) -> {
+            Integer id = Integer.valueOf(resultSet.getString("id"));
+            String media_type = resultSet.getString("media_type");
+            String like_type = resultSet.getString("like_type");
+            return new Like(id, userId, like_type, media_type);
+        });
     }
 
     @Override
@@ -55,7 +62,7 @@ public class LikedMovieDataAccessService implements LikedMovieDao {
     }
 
     @Override
-    public int updateLikedMovieById(int id, LikedMoviesRequestModel likedMovie) {
+    public int updateLikedMovieById(int id, LikedMoviesResponseModel likedMovie) {
 //        String sql = "UPDATE liked_films " +
 //                "SET status = ? " +
 //                "WHERE id = ?;";

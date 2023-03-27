@@ -16,4 +16,6 @@ public interface MediaDao {
 
     List<Media> getMediaInMyList(Integer employeeId);
 
+//    List<Media> getMediaThatILike(Integer employeeId);
+
 }

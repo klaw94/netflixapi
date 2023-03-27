@@ -57,6 +57,19 @@ public class MediaDataAccessService implements MediaDao {
         });
     }
 
+//    @Override
+//    public List<Media> getMediaThatILike(Integer employeeId) {
+//        String sql = "SELECT * FROM media JOIN likes ON likes.media_id = media.id " +
+//                "AND likes.media_type = media.media_type" +
+//                " WHERE watchlist.user_id = ?  ";
+//
+//        return jdbcTemplate.query(sql, new Object[]{employeeId}, (resultSet, i) -> {
+//            Integer id = Integer.valueOf(resultSet.getString("id"));
+//            String media_type = resultSet.getString("media_type");
+//            String backdrop_path = resultSet.getString("backdrop_path");
+//            return new Media(id, media_type, backdrop_path);
+//        });    }
+
     @Override
     public int deleteMediaById(int mediaId, String mediaType) {
 

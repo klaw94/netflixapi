@@ -1,7 +1,8 @@
 package com.example.netflixdatabaseapi.service;
 
-import com.example.netflixdatabaseapi.dao.LikedMovieDao;
-import com.example.netflixdatabaseapi.responsemodels.LikedMoviesRequestModel;
+import com.example.netflixdatabaseapi.dao.LikeDao;
+import com.example.netflixdatabaseapi.dao.MediaDao;
+import com.example.netflixdatabaseapi.model.Like;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -11,26 +12,33 @@ import java.util.List;
 @Service
 public class LikedMovieService {
 
-    private final LikedMovieDao likedMovieDao;
+    private final MediaDao mediaDao;
+    private final LikeDao likeDao;
 
     @Autowired
-    public LikedMovieService(@Qualifier("liked") LikedMovieDao likedMovieDao){
-        this.likedMovieDao = likedMovieDao;
+    public LikedMovieService(@Qualifier("postgres") MediaDao mediaDao, @Qualifier("liked") LikeDao likeDao){
+        this.mediaDao = mediaDao;
+        this.likeDao = likeDao;
     }
 
-    public int addLikedMovie(Integer employeeID, LikedMoviesRequestModel likedMovie){
-        return likedMovieDao.insertLikedMovie(employeeID, likedMovie);
+    public int addLikedMovie(Integer employeeID, LikedMoviesResponseModel likedMovie){
+     //   return likedMovieDao.insertLikedMovie(employeeID, likedMovie);
     }
 
-    public List<LikedMoviesRequestModel> getAllLikedMovies(){
-        return likedMovieDao.selectAllLikedMovies();
+    public List<LikedMoviesResponseModel> getAllLikedMovies(){
+      ///  return likedMovieDao.selectAllLikedMovies();
+    }
+
+    public List<Like> getMediaThatILike(Integer userId) {
+        return likeDao.selectAllLikesByUserId(userId);
+
     }
 
     public int deleteLikedMovie(Integer id, Integer employeeId){
         return likedMovieDao.deleteLikedMovieById(id, employeeId);
     }
 
-    public int updateLikedMovie(Integer employeeId, LikedMoviesRequestModel newLikedMovie){
-        return likedMovieDao.updateLikedMovieById(employeeId, newLikedMovie);
+    public int updateLikedMovie(Integer employeeId, LikedMoviesResponseModel newLikedMovie){
+        return mediaDao.updateLikedMovieById(employeeId, newLikedMovie);
     }
 }
